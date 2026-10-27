@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keja Mtaani | Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-wrap { max-width: 1100px; margin: auto; padding: 32px 6%; }
+    .admin-panel { background: white; padding: 22px; border-radius: 12px;
+      box-shadow: 0 4px 18px #173c2b12; margin: 20px 0; }
+    .admin-form { display: grid; gap: 12px; max-width: 420px; }
+    .admin-form input { width: 100%; padding: 12px; border: 1px solid #ccd5cc;
+      border-radius: 6px; font: inherit; }
+    .admin-message { margin: 16px 0; overflow-wrap: anywhere; }
+    .admin-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px; }
+    .admin-card { border: 1px solid #e0e7df; border-radius: 10px; overflow: hidden;
+      background: white; }
+    .admin-card img { width: 100%; height: 200px; object-fit: cover; }
+    .admin-card-content { padding: 16px; overflow-wrap: anywhere; }
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .reject-button { background: #a52c2c; }
+    .reject-button:hover { background: #7e2020; }
+    .status-label { display: inline-block; padding: 4px 9px; border-radius: 20px;
+      background: #edf2ed; font-size: .85rem; font-weight: bold; }
+    .hidden { display: none !important; }
+    .admin-top { display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; flex-wrap: wrap; }
+    .admin-top a { color: #176b45; }
+    @media (max-width: 700px) {
+      .admin-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">🏠 Keja Mtaani</a>
+    <nav><a href="index.html">View public website</a></nav>
+  </header>
+
+  <main class="admin-wrap">
+    <div class="admin-top">
+      <div>
+        <p class="eyebrow">PRIVATE MANAGEMENT AREA</p>
+        <h1>Admin Dashboard</h1>
+        <p>Review house listings before they appear publicly.</p>
+      </div>
+      <button id="logout-button" class="button hidden" type="button">
+        Sign out
+      </button>
+    </div>
+
+    <section id="login-panel" class="admin-panel">
+      <h2>Administrator sign in</h2>
+      <p>Use the admin account created in Supabase Authentication.</p>
+
+      <form id="login-form" class="admin-form">
+        <label for="admin-email">Email address</label>
+        <input id="admin-email" type="email" autocomplete="username"
+               required>
+
+        <label for="admin-password">Password</label>
+        <input id="admin-password" type="password"
+               autocomplete="current-password" required>
+
+        <button class="button" type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <section id="dashboard-panel" class="hidden">
+      <div class="admin-panel">
+        <h2>House submissions</h2>
+        <p>Review the property details before approving a listing.</p>
+
+        <label for="status-filter">Show listings</label>
+        <select id="status-filter">
+          <option value="pending">Pending review</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="all">All statuses</option>
+        </select>
+
+        <p id="dashboard-message" class="admin-message"
+           role="status" aria-live="polite"></p>
+        <div id="admin-list" class="admin-list"></div>
+      </div>
+    </section>
+
+    <p id="page-message" class="admin-message" role="status"
+       aria-live="polite"></p>
+  </main>
+
+  <footer>
+    <p>Keja Mtaani Admin Dashboard</p>
+    <p>Verify property information before publishing listings.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

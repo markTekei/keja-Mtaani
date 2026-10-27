@@ -1,214 +1,198 @@
-/*
-    KEJA MTAANI
-    Sample rental listings for learning and demonstration.
+"use strict";
 
-    Replace the example WhatsApp number below with your own
-    number, using Kenya's country code 254.
-*/
+// 1. Paste your Supabase Project URL here.
+const SUPABASE_URL = "https://mlbunltzvoouegcstdso.supabase.co";
 
-const whatsappNumber = "254700000000";
+// 2. Paste your Supabase publishable key here.
+// It should begin with sb_publishable_.
+// NEVER put a secret/service-role key here.
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable__i327Y-mupX-jdXXCvvDSw_pCis9B3E";
 
-const houses = [
-    {
-        id: 1,
-        name: "Affordable Single Room",
-        area: "Kangemi",
-        rent: 3000,
-        type: "Single room",
-        details: "Sample listing. Confirm facilities and extra costs."
-    },
-    {
-        id: 2,
-        name: "Budget Bedsitter",
-        area: "Kangemi",
-        rent: 5500,
-        type: "Bedsitter",
-        details: "Sample listing. Ask about the deposit."
-    },
-    {
-        id: 3,
-        name: "Single Room Rental",
-        area: "Mountain View",
-        rent: 3500,
-        type: "Single room",
-        details: "Sample listing. Confirm the exact location."
-    },
-    {
-        id: 4,
-        name: "Compact Bedsitter",
-        area: "Mountain View",
-        rent: 6500,
-        type: "Bedsitter",
-        details: "Sample listing. Confirm availability."
-    },
-    {
-        id: 5,
-        name: "One Bedroom Home",
-        area: "Kitisuru",
-        rent: 12000,
-        type: "One bedroom",
-        details: "Sample listing. Ask about water charges."
-    },
-    {
-        id: 6,
-        name: "Small Bedsitter",
-        area: "Highridge",
-        rent: 8000,
-        type: "Bedsitter",
-        details: "Sample listing. Confirm transport options."
-    },
-    {
-        id: 7,
-        name: "Budget Single Room",
-        area: "Parklands",
-        rent: 5000,
-        type: "Single room",
-        details: "Sample listing. Confirm the address."
-    }
-];
-
-const houseList = document.getElementById("house-list");
-const resultCount = document.getElementById("result-count");
+const messageElement = document.getElementById("listing-message");
+const houseListElement = document.getElementById("house-list");
 const searchForm = document.getElementById("search-form");
 
+let allHouses = [];
+let supabaseClient = null;
+
+document.getElementById("current-year").textContent =
+  new Date().getFullYear();
+
+function showMessage(message) {
+  messageElement.textContent = message;
+}
+
 function formatRent(rent) {
-    return rent.toLocaleString("en-KE");
+  return "KSh " + Number(rent).toLocaleString("en-KE") + " / month";
 }
 
-function openWhatsApp(message) {
-    const url =
-        `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+function createHouseCard(house) {
+  const card = document.createElement("article");
+  card.className = "house-card";
 
-    window.open(url, "_blank", "noopener,noreferrer");
+  // Only load images from HTTPS URLs.
+  if (house.image_url &&
+      house.image_url.startsWith("https://")) {
+    const image = document.createElement("img");
+    image.src = house.image_url;
+    image.alt = house.title;
+    image.loading = "lazy";
+    image.className = "house-image";
+    card.appendChild(image);
+  }
+
+  const content = document.createElement("div");
+  content.className = "house-content";
+
+  const title = document.createElement("h3");
+  title.textContent = house.title;
+
+  const location = document.createElement("p");
+  location.className = "house-location";
+  location.textContent = "📍 " + house.area;
+
+  const rent = document.createElement("p");
+  rent.className = "house-rent";
+  rent.textContent = formatRent(house.rent);
+
+  const type = document.createElement("p");
+  type.textContent = "Type: " + house.house_type;
+
+  const description = document.createElement("p");
+  description.textContent = house.description || "Contact us for details.";
+
+  content.append(title, location, rent, type, description);
+
+  // Contact number is optional. No phone number is invented.
+  const phone = String(house.contact_phone || "").replace(/\D/g, "");
+
+  if (phone) {
+    const contactLink = document.createElement("a");
+    contactLink.className = "button";
+    contactLink.textContent = "Enquire on WhatsApp";
+    contactLink.href =
+      "https://wa.me/" + phone +
+      "?text=" + encodeURIComponent(
+        "Hello, I am enquiring about " + house.title +
+        " in " + house.area + ". Is it available?"
+      );
+    contactLink.target = "_blank";
+    contactLink.rel = "noopener noreferrer";
+    content.appendChild(contactLink);
+  }
+
+  card.appendChild(content);
+  return card;
 }
 
-function displayHouses(list) {
-    houseList.replaceChildren();
+function renderHouses(houses) {
+  houseListElement.replaceChildren();
 
-    resultCount.textContent =
-        `${list.length} ${list.length === 1 ? "house" : "houses"} found`;
+  if (houses.length === 0) {
+    showMessage(
+      allHouses.length === 0
+        ? "No approved houses are listed yet. Please check again later."
+        : "No houses match your search. Try changing your filters."
+    );
+    return;
+  }
 
-    if (list.length === 0) {
-        const emptyMessage = document.createElement("p");
-        emptyMessage.className = "no-results";
-        emptyMessage.textContent =
-            "No matching sample houses found. Try increasing your budget or choosing another area.";
+  showMessage(
+    houses.length + (houses.length === 1
+      ? " approved house found."
+      : " approved houses found.")
+  );
 
-        houseList.appendChild(emptyMessage);
-        return;
+  houses.forEach(function (house) {
+    houseListElement.appendChild(createHouseCard(house));
+  });
+}
+
+function applyFilters() {
+  const selectedArea =
+    document.getElementById("area-filter").value.toLowerCase();
+
+  const maxRentInput =
+    document.getElementById("rent-filter").value;
+
+  const maxRent = maxRentInput === ""
+    ? null
+    : Number(maxRentInput);
+
+  const selectedType =
+    document.getElementById("type-filter").value.toLowerCase();
+
+  const filteredHouses = allHouses.filter(function (house) {
+    const matchesArea =
+      !selectedArea || house.area.toLowerCase() === selectedArea;
+
+    const matchesRent =
+      maxRent === null || Number(house.rent) <= maxRent;
+
+    const matchesType =
+      !selectedType || house.house_type.toLowerCase() === selectedType;
+
+    return matchesArea && matchesRent && matchesType;
+  });
+
+  renderHouses(filteredHouses);
+}
+
+async function loadHouses() {
+  showMessage("Loading approved houses...");
+  houseListElement.replaceChildren();
+
+  if (!window.supabase) {
+    showMessage("The database library did not load. Check your internet connection.");
+    return;
+  }
+
+  if (
+    SUPABASE_URL.includes("PASTE_YOUR") ||
+    SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
+  ) {
+    showMessage("Add your Supabase Project URL and publishable key in script.js.");
+    return;
+  }
+
+  try {
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const { data, error } = await supabaseClient
+      .from("houses")
+      .select(
+        "id, title, area, rent, house_type, description, image_url, contact_phone"
+      )
+      .eq("status", "approved")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Supabase listing error:", error);
+      showMessage(
+        "We could not load houses. Check your database table, key, and security policies."
+      );
+      return;
     }
 
-    list.forEach(function (house) {
-        const card = document.createElement("article");
-        card.className = "house-card";
-
-        const type = document.createElement("span");
-        type.className = "house-type";
-        type.textContent = house.type;
-
-        const title = document.createElement("h3");
-        title.textContent = house.name;
-
-        const area = document.createElement("p");
-        area.className = "house-area";
-        area.textContent = `📍 ${house.area}, Westlands area`;
-
-        const price = document.createElement("p");
-        price.className = "house-price";
-        price.textContent = `KSh ${formatRent(house.rent)} / month`;
-
-        const details = document.createElement("p");
-        details.className = "house-details";
-        details.textContent = house.details;
-
-        const button = document.createElement("button");
-        button.className = "button";
-        button.type = "button";
-        button.textContent = "Enquire on WhatsApp";
-
-        button.addEventListener("click", function () {
-            const message =
-                `Hello, I found your listing on Keja Mtaani. ` +
-                `I would like to enquire about ${house.name} in ${house.area}. ` +
-                `The displayed sample rent is KSh ${formatRent(house.rent)} per month. ` +
-                `Please confirm if a real house is available and share its exact location.`;
-
-            openWhatsApp(message);
-        });
-
-        card.append(type, title, area, price, details, button);
-        houseList.appendChild(card);
-    });
+    allHouses = data || [];
+    applyFilters();
+  } catch (error) {
+    console.error("Unexpected loading error:", error);
+    showMessage("Something went wrong while loading houses. Please try again.");
+  }
 }
 
 searchForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const selectedArea = document.getElementById("area").value;
-    const maxRentInput = document.getElementById("max-rent").value;
-    const selectedType = document.getElementById("house-type").value;
-
-    const maxRent =
-        maxRentInput.trim() === "" ? Infinity : Number(maxRentInput);
-
-    if (!Number.isFinite(maxRent) && maxRent !== Infinity) {
-        alert("Please enter a valid maximum rent.");
-        return;
-    }
-
-    if (maxRent < 0) {
-        alert("Maximum rent cannot be negative.");
-        return;
-    }
-
-    const filteredHouses = houses.filter(function (house) {
-        const matchesArea =
-            selectedArea === "all" || house.area === selectedArea;
-
-        const matchesRent = house.rent <= maxRent;
-
-        const matchesType =
-            selectedType === "all" || house.type === selectedType;
-
-        return matchesArea && matchesRent && matchesType;
-    });
-
-    displayHouses(filteredHouses);
+  event.preventDefault();
+  applyFilters();
 });
 
-document.getElementById("reset").addEventListener("click", function () {
-    searchForm.reset();
-    displayHouses(houses);
+document.getElementById("reset-search").addEventListener("click", function () {
+  searchForm.reset();
+  applyFilters();
 });
 
-document.getElementById("contact-form").addEventListener(
-    "submit",
-    function (event) {
-        event.preventDefault();
-
-        const name = document.getElementById("name").value.trim();
-        const area = document.getElementById("contact-area").value;
-        const budget = document.getElementById("budget").value;
-        const details =
-            document.getElementById("contact-message").value.trim();
-
-        if (name === "" || budget === "" || Number(budget) < 0) {
-            alert("Please enter your name and a valid budget.");
-            return;
-        }
-
-        const message =
-            `Hello Keja Mtaani. My name is ${name}. ` +
-            `I am looking for a rental house in ${area}. ` +
-            `My monthly budget is KSh ${formatRent(Number(budget))}. ` +
-            `Additional details: ${details || "None provided"}.`;
-
-        openWhatsApp(message);
-    }
-);
-
-document.getElementById("year").textContent =
-    new Date().getFullYear();
-
-// Show all sample listings when the website opens.
-displayHouses(houses);
+loadHouses();

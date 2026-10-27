@@ -1,198 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-        content="Keja Mtaani helps you search for affordable rental houses in Westlands, Nairobi.">
-
-    <title>Keja Mtaani | Find an Affordable Home</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find houses and affordable rentals in Westlands, Nairobi.">
+  <title>Keja Mtaani | Find an Affordable Home</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <header class="navbar">
-        <a class="logo" href="#home">🏠 Keja <span>Mtaani</span></a>
+  <header class="site-header">
+    <a class="brand" href="#">🏠 Keja Mtaani</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#listings">Find a House</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#search">Find a House</a>
-            <a href="#listings">Listings</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <p class="eyebrow">YOUR NEXT HOME STARTS HERE</p>
+        <h1>Find a place you can call home.</h1>
+        <p>Explore rental listings and find a home that fits your budget.</p>
+        <a class="button" href="#listings">Explore Houses</a>
+      </div>
+    </section>
 
-    <main>
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <p class="eyebrow">YOUR NEIGHBOURHOOD, YOUR HOME</p>
+    <section class="section" id="listings">
+      <div class="section-heading">
+        <p class="eyebrow">HOUSE LISTINGS</p>
+        <h2>Find your next home</h2>
+        <p>Search approved listings stored online.</p>
+      </div>
 
-                <h1>Find a keja that fits your budget.</h1>
+      <form id="search-form" class="search-form">
+        <label>
+          Area
+          <select id="area-filter">
+            <option value="">All areas</option>
+            <option value="Kangemi">Kangemi</option>
+            <option value="Mountain View">Mountain View</option>
+            <option value="Kitisuru">Kitisuru</option>
+            <option value="Parklands">Parklands</option>
+            <option value="Highridge">Highridge</option>
+          </select>
+        </label>
 
-                <p>
-                    Search for affordable rental houses in Kangemi,
-                    Mountain View and other areas around Westlands,
-                    Nairobi.
-                </p>
+        <label>
+          Maximum rent (KSh)
+          <input id="rent-filter" type="number" min="0"
+                 placeholder="e.g. 8000">
+        </label>
 
-                <a href="#search" class="button">Find a House</a>
-            </div>
-        </section>
+        <label>
+          House type
+          <select id="type-filter">
+            <option value="">All types</option>
+            <option value="Single room">Single room</option>
+            <option value="Bedsitter">Bedsitter</option>
+            <option value="One bedroom">One bedroom</option>
+            <option value="Two bedroom">Two bedroom</option>
+          </select>
+        </label>
 
-        <section class="search-section" id="search">
-            <p class="eyebrow">START YOUR SEARCH</p>
-            <h2>What kind of house are you looking for?</h2>
+        <div class="search-actions">
+          <button class="button" type="submit">Search</button>
+          <button class="button button-light" type="button"
+                  id="reset-search">Reset</button>
+        </div>
+      </form>
 
-            <form id="search-form" class="search-form">
-                <div class="form-group">
-                    <label for="area">Area</label>
-                    <select id="area">
-                        <option value="all">All areas</option>
-                        <option value="Kangemi">Kangemi</option>
-                        <option value="Mountain View">Mountain View</option>
-                        <option value="Kitisuru">Kitisuru</option>
-                        <option value="Parklands">Parklands</option>
-                        <option value="Highridge">Highridge</option>
-                    </select>
-                </div>
+      <p id="listing-message" class="message" role="status"
+         aria-live="polite">Connecting to house listings...</p>
 
-                <div class="form-group">
-                    <label for="max-rent">Maximum monthly rent (KSh)</label>
-                    <input
-                        type="number"
-                        id="max-rent"
-                        min="0"
-                        placeholder="e.g. 6000"
-                    >
-                </div>
+      <div id="house-list" class="house-grid"></div>
+    </section>
 
-                <div class="form-group">
-                    <label for="house-type">House type</label>
-                    <select id="house-type">
-                        <option value="all">All types</option>
-                        <option value="Single room">Single room</option>
-                        <option value="Bedsitter">Bedsitter</option>
-                        <option value="One bedroom">One bedroom</option>
-                    </select>
-                </div>
+    <section class="owner-section">
+      <div>
+        <p class="eyebrow">LANDLORDS</p>
+        <h2>Have a house to rent?</h2>
+        <p>We are building a way for landlords to submit properties
+           for review before they appear on Keja Mtaani.</p>
+      </div>
+      <p class="owner-note">Landlord submissions are coming soon.</p>
+    </section>
 
-                <div class="form-actions">
-                    <button type="submit" class="button">
-                        Search Houses
-                    </button>
+    <section class="section contact-section" id="contact">
+      <p class="eyebrow">GET IN TOUCH</p>
+      <h2>Need help finding a house?</h2>
+      <p>Contact the Keja Mtaani team for assistance.</p>
+      <p class="small-note">
+        Add your real contact details before publishing this website.
+      </p>
+    </section>
+  </main>
 
-                    <button type="button" id="reset" class="reset-button">
-                        Clear Filters
-                    </button>
-                </div>
-            </form>
-        </section>
+  <footer>
+    <p>© <span id="current-year"></span> Keja Mtaani</p>
+    <p>Confirm property details and availability before paying any deposit.</p>
+  </footer>
 
-        <section class="listings" id="listings">
-            <div class="listings-heading">
-                <div>
-                    <p class="eyebrow">EXPLORE RENTALS</p>
-                    <h2>Houses to explore</h2>
-                    <p class="section-description">
-                        Search listings that match your budget.
-                    </p>
-                </div>
-
-                <span id="result-count">0 houses</span>
-            </div>
-
-            <div id="house-list" class="house-grid"></div>
-
-            <p class="disclaimer">
-                These are sample listings for demonstration only.
-                Prices, locations and availability have not been verified.
-            </p>
-        </section>
-
-        <section class="owner-section">
-            <div>
-                <p class="eyebrow">FOR LANDLORDS</p>
-                <h2>Have a house to rent out?</h2>
-                <p>
-                    Contact Keja Mtaani to ask about listing your
-                    rental property.
-                </p>
-            </div>
-
-            <a href="#contact" class="button">Contact Us</a>
-        </section>
-
-        <section class="contact-section" id="contact">
-            <p class="eyebrow">GET IN TOUCH</p>
-            <h2>Let us help you find a keja.</h2>
-            <p>
-                Prepare a message about the kind of house you need.
-            </p>
-
-            <form id="contact-form">
-                <div class="form-group">
-                    <label for="name">Your name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="Enter your name"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="contact-area">Preferred area</label>
-                    <select id="contact-area">
-                        <option value="Any area">Any area</option>
-                        <option value="Kangemi">Kangemi</option>
-                        <option value="Mountain View">Mountain View</option>
-                        <option value="Kitisuru">Kitisuru</option>
-                        <option value="Parklands">Parklands</option>
-                        <option value="Highridge">Highridge</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="budget">Your monthly budget (KSh)</label>
-                    <input
-                        type="number"
-                        id="budget"
-                        min="0"
-                        placeholder="e.g. 5000"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="contact-message">Additional details</label>
-                    <textarea
-                        id="contact-message"
-                        rows="4"
-                        placeholder="Describe the house you need..."
-                    ></textarea>
-                </div>
-
-                <button type="submit" class="button">
-                    Continue on WhatsApp
-                </button>
-            </form>
-
-            <p class="form-note">
-                Your message will open in WhatsApp. You must send it yourself.
-            </p>
-        </section>
-    </main>
-
-    <footer>
-        <a class="logo footer-logo" href="#home">
-            🏠 Keja <span>Mtaani</span>
-        </a>
-
-        <p>Find a keja. Fit your budget.</p>
-        <p>© <span id="year"></span> Keja Mtaani</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <!-- This is the Supabase JavaScript library, not a secret key. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
 </body>
 </html>
