@@ -3,106 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Find houses and affordable rentals in Westlands, Nairobi.">
-  <title>Keja Mtaani | Find an Affordable Home</title>
+  <meta name="theme-color" content="#f8f8f4">
+  <meta name="description" content="Find affordable rental houses, bedsitters and apartments in Nairobi. Search by neighbourhood, home type and budget with Keja Mtaani.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://marktekei.github.io/keja-Mtaani/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_KE">
+  <meta property="og:site_name" content="Keja Mtaani">
+  <meta property="og:title" content="Keja Mtaani | Find affordable homes in Nairobi">
+  <meta property="og:description" content="Search approved rental houses, bedsitters and apartments in Nairobi by neighbourhood, home type and budget.">
+  <meta property="og:url" content="https://marktekei.github.io/keja-Mtaani/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&amp;fit=crop&amp;w=1200&amp;q=85">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Keja Mtaani | Find a place to call home</title>
   <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Keja Mtaani",
+      "url": "https://marktekei.github.io/keja-Mtaani/",
+      "description": "Search rental houses, bedsitters and apartments in Nairobi by neighbourhood, home type and budget.",
+      "inLanguage": "en-KE",
+      "areaServed": {
+        "@type": "City",
+        "name": "Nairobi"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Keja Mtaani"
+      }
+    }
+  </script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#">🏠 Keja Mtaani</a>
-    <nav>
+    <a class="brand" href="#home" aria-label="Keja Mtaani home">
+      <span class="brand-icon" aria-hidden="true">⌂</span>
+      <span>keja<span class="brand-accent">mtaani</span></span>
+    </a>
+    <nav aria-label="Main navigation">
       <a href="#home">Home</a>
-      <a href="#listings">Find a House</a>
+      <a href="#listings">Find a home</a>
+      <a href="#how-it-works">How it works</a>
       <a href="#contact">Contact</a>
     </nav>
+    <a class="button header-button" href="landlord.html">List your house <span aria-hidden="true">↗</span></a>
   </header>
 
   <main>
     <section class="hero" id="home">
-      <div class="hero-content">
-        <p class="eyebrow">YOUR NEXT HOME STARTS HERE</p>
-        <h1>Find a place you can call home.</h1>
-        <p>Explore rental listings and find a home that fits your budget.</p>
-        <a class="button" href="#listings">Explore Houses</a>
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> A better way to find your next home</p>
+        <h1>Good homes.<br><span>Good beginnings.</span></h1>
+        <p class="hero-intro">Find a place that feels right and fits your budget. Your next chapter starts right here in the neighbourhood.</p>
+        <a class="button hero-button" href="#listings">Explore available homes <span aria-hidden="true">↓</span></a>
+        <p class="hero-note"><span aria-hidden="true">✓</span> Browse approved listings and contact the landlord directly</p>
+      </div>
+      <div class="hero-visual">
+        <img
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&amp;fit=crop&amp;w=1400&amp;q=85"
+          alt="A welcoming modern home surrounded by greenery"
+          fetchpriority="high">
+        <div class="photo-caption">
+          <span class="caption-icon" aria-hidden="true">⌂</span>
+          <span><strong>Somewhere to settle in</strong><small>Find your place, at your pace.</small></span>
+        </div>
+        <span class="photo-sparkle" aria-hidden="true">✳</span>
       </div>
     </section>
 
-    <section class="section" id="listings">
-      <div class="section-heading">
-        <p class="eyebrow">HOUSE LISTINGS</p>
-        <h2>Find your next home</h2>
-        <p>Search approved listings stored online.</p>
+    <section class="listing-section" id="listings">
+      <div class="listing-top">
+        <div class="section-heading">
+          <p class="eyebrow">YOUR SEARCH STARTS HERE</p>
+          <h2>Find a home that fits</h2>
+          <p>Choose what matters to you. We’ll help narrow down the search.</p>
+        </div>
+        <span class="listing-note"><span aria-hidden="true">⌖</span> Nairobi, Kenya</span>
       </div>
 
       <form id="search-form" class="search-form">
-        <label>
-          Area
-          <select id="area-filter">
-            <option value="">All areas</option>
-            <option value="Kangemi">Kangemi</option>
-            <option value="Mountain View">Mountain View</option>
-            <option value="Kitisuru">Kitisuru</option>
-            <option value="Parklands">Parklands</option>
-            <option value="Highridge">Highridge</option>
-          </select>
+        <label for="area-filter">
+          <span class="filter-label">Neighbourhood</span>
+          <span class="input-wrap">
+            <span class="input-icon" aria-hidden="true">⌖</span>
+            <select id="area-filter">
+              <option value="">All neighbourhoods</option>
+              <option value="Kangemi">Kangemi</option>
+              <option value="Kawangware">Kawangware</option>
+              <option value="Mountain View">Mountain View</option>
+              <option value="Kitisuru">Kitisuru</option>
+              <option value="Parklands">Parklands</option>
+              <option value="Highridge">Highridge</option>
+            </select>
+          </span>
         </label>
 
-        <label>
-          Maximum rent (KSh)
-          <input id="rent-filter" type="number" min="0"
-                 placeholder="e.g. 8000">
+        <label for="rent-filter">
+          <span class="filter-label">Monthly budget</span>
+          <span class="input-wrap">
+            <span class="input-icon currency-icon" aria-hidden="true">KSh</span>
+            <input id="rent-filter" type="number" min="0" placeholder="Maximum rent">
+          </span>
         </label>
 
-        <label>
-          House type
-          <select id="type-filter">
-            <option value="">All types</option>
-            <option value="Single room">Single room</option>
-            <option value="Bedsitter">Bedsitter</option>
-            <option value="One bedroom">One bedroom</option>
-            <option value="Two bedroom">Two bedroom</option>
-          </select>
+        <label for="type-filter">
+          <span class="filter-label">Home type</span>
+          <span class="input-wrap">
+            <span class="input-icon" aria-hidden="true">⌂</span>
+            <select id="type-filter">
+              <option value="">All home types</option>
+              <option value="Single room">Single room</option>
+              <option value="Bedsitter">Bedsitter</option>
+              <option value="One bedroom">One bedroom</option>
+              <option value="Two bedroom">Two bedroom</option>
+            </select>
+          </span>
         </label>
 
         <div class="search-actions">
-          <button class="button" type="submit">Search</button>
-          <button class="button button-light" type="button"
-                  id="reset-search">Reset</button>
+          <button class="button search-button" type="submit"><span aria-hidden="true">⌕</span> Search homes</button>
+          <button class="reset-button" type="button" id="reset-search">Clear filters</button>
         </div>
       </form>
 
-      <p id="listing-message" class="message" role="status"
-         aria-live="polite">Connecting to house listings...</p>
-
+      <div class="results-heading">
+        <div>
+          <p class="eyebrow">HANDPICKED FOR YOU</p>
+          <h2>Places to call home</h2>
+        </div>
+        <span class="results-prompt">Your next home could be here <span aria-hidden="true">↘</span></span>
+      </div>
+      <p id="listing-message" class="message" role="status" aria-live="polite">Connecting to house listings...</p>
       <div id="house-list" class="house-grid"></div>
     </section>
 
-    <section class="owner-section">
-      <div>
-        <p class="eyebrow">LANDLORDS</p>
-        <h2>Have a house to rent?</h2>
-        <p>We are building a way for landlords to submit properties
-           for review before they appear on Keja Mtaani.</p>
+    <section class="how-section" id="how-it-works">
+      <div class="how-heading">
+        <p class="eyebrow">SIMPLE FROM START TO SETTLE</p>
+        <h2>A little less searching.<br>A lot more feeling at home.</h2>
       </div>
-      <p class="owner-note">Landlord submissions are coming soon.</p>
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <span class="step-icon" aria-hidden="true">⌕</span>
+          <h3>Search your way</h3>
+          <p>Filter by neighbourhood, monthly budget and the kind of home you need.</p>
+        </article>
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <span class="step-icon" aria-hidden="true">♡</span>
+          <h3>Find your fit</h3>
+          <p>Explore approved listings and compare the details that matter to you.</p>
+        </article>
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <span class="step-icon" aria-hidden="true">↗</span>
+          <h3>Talk directly</h3>
+          <p>Reach out to the landlord on WhatsApp to ask questions and arrange a viewing.</p>
+        </article>
+      </div>
     </section>
 
-    <section class="section contact-section" id="contact">
-      <p class="eyebrow">GET IN TOUCH</p>
-      <h2>Need help finding a house?</h2>
-      <p>Contact the Keja Mtaani team for assistance.</p>
-      <p class="small-note">
-        Add your real contact details before publishing this website.
-      </p>
+    <section class="owner-section">
+      <div class="owner-copy">
+        <p class="eyebrow">FOR LANDLORDS</p>
+        <h2>A good home deserves the right tenant.</h2>
+        <p>Share your rental with people looking for a place to call home. Submit your property for review before it goes live.</p>
+      </div>
+      <a class="button owner-button" href="landlord.html">List your property <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <span class="contact-icon" aria-hidden="true">⌂</span>
+      <p class="eyebrow">HERE TO HELP YOU SETTLE IN</p>
+      <h2>Looking for a place to call home?</h2>
+      <p>Start with a search, or get in touch with the landlord on a listing that feels right.</p>
+      <a href="#listings" class="text-link">Browse available homes <span aria-hidden="true">→</span></a>
     </section>
   </main>
 
   <footer>
-    <p>© <span id="current-year"></span> Keja Mtaani</p>
-    <p>Confirm property details and availability before paying any deposit.</p>
+    <a class="brand footer-brand" href="#home">
+      <span class="brand-icon" aria-hidden="true">⌂</span>
+      <span>keja<span class="brand-accent">mtaani</span></span>
+    </a>
+    <p>Find a home that feels like yours.</p>
+    <span class="footer-divider"></span>
+    <p class="footer-small">© <span id="current-year"></span> Keja Mtaani <span class="footer-dot">·</span> Confirm property details and availability before paying any deposit.</p>
   </footer>
 
-  <!-- This is the Supabase JavaScript library, not a secret key. -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>

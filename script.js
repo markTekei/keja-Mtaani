@@ -1,11 +1,7 @@
 "use strict";
 
-// 1. Paste your Supabase Project URL here.
+// Supabase project settings
 const SUPABASE_URL = "https://mlbunltzvoouegcstdso.supabase.co";
-
-// 2. Paste your Supabase publishable key here.
-// It should begin with sb_publishable_.
-// NEVER put a secret/service-role key here.
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable__i327Y-mupX-jdXXCvvDSw_pCis9B3E";
 
 const messageElement = document.getElementById("listing-message");
@@ -30,14 +26,18 @@ function createHouseCard(house) {
   const card = document.createElement("article");
   card.className = "house-card";
 
-  // Only load images from HTTPS URLs.
-  if (house.image_url &&
-      house.image_url.startsWith("https://")) {
+  if (house.photo_url &&
+      house.photo_url.startsWith("https://")) {
     const image = document.createElement("img");
-    image.src = house.image_url;
+    image.src = house.photo_url;
     image.alt = house.title;
     image.loading = "lazy";
     image.className = "house-image";
+
+    image.onerror = function () {
+      image.remove();
+    };
+
     card.appendChild(image);
   }
 
@@ -59,11 +59,11 @@ function createHouseCard(house) {
   type.textContent = "Type: " + house.house_type;
 
   const description = document.createElement("p");
-  description.textContent = house.description || "Contact us for details.";
+  description.textContent =
+    house.description || "Contact us for details.";
 
   content.append(title, location, rent, type, description);
 
-  // Contact number is optional. No phone number is invented.
   const phone = String(house.contact_phone || "").replace(/\D/g, "");
 
   if (phone) {
@@ -98,7 +98,8 @@ function renderHouses(houses) {
   }
 
   showMessage(
-    houses.length + (houses.length === 1
+    houses.length +
+    (houses.length === 1
       ? " approved house found."
       : " approved houses found.")
   );
@@ -108,9 +109,32 @@ function renderHouses(houses) {
   });
 }
 
+function normalizeFilterValue(value) {
+  return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function normalizeArea(area) {
+  const normalizedArea = normalizeFilterValue(area);
+  return normalizedArea === "kitusuri" ? "kitisuru" : normalizedArea;
+}
+
+function normalizeHouseType(type) {
+  const normalizedType = normalizeFilterValue(type);
+
+  if (normalizedType === "single") {
+    return "single room";
+  }
+
+  if (normalizedType === "1 bedroom") {
+    return "one bedroom";
+  }
+
+  return normalizedType;
+}
+
 function applyFilters() {
   const selectedArea =
-    document.getElementById("area-filter").value.toLowerCase();
+    normalizeArea(document.getElementById("area-filter").value);
 
   const maxRentInput =
     document.getElementById("rent-filter").value;
@@ -120,17 +144,18 @@ function applyFilters() {
     : Number(maxRentInput);
 
   const selectedType =
-    document.getElementById("type-filter").value.toLowerCase();
+    normalizeHouseType(document.getElementById("type-filter").value);
 
   const filteredHouses = allHouses.filter(function (house) {
     const matchesArea =
-      !selectedArea || house.area.toLowerCase() === selectedArea;
+      !selectedArea || normalizeArea(house.area) === selectedArea;
 
     const matchesRent =
       maxRent === null || Number(house.rent) <= maxRent;
 
     const matchesType =
-      !selectedType || house.house_type.toLowerCase() === selectedType;
+      !selectedType ||
+      normalizeHouseType(house.house_type) === selectedType;
 
     return matchesArea && matchesRent && matchesType;
   });
@@ -143,15 +168,9 @@ async function loadHouses() {
   houseListElement.replaceChildren();
 
   if (!window.supabase) {
-    showMessage("The database library did not load. Check your internet connection.");
-    return;
-  }
-
-  if (
-    SUPABASE_URL.includes("PASTE_YOUR") ||
-    SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
-  ) {
-    showMessage("Add your Supabase Project URL and publishable key in script.js.");
+    showMessage(
+      "The database library did not load. Check your internet connection."
+    );
     return;
   }
 
@@ -170,18 +189,87 @@ async function loadHouses() {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Supabase listing error:", error);
-      showMessage(
-        "We could not load houses. Check your database table, key, and security policies."
-      );
+      console.error("Error loading houses:", error);
+      showMessage("We could not load houses. Please try again.");
       return;
     }
 
-    allHouses = data || [];
+    const housesWithPhotos = await Promise.all(
+      (data || []).map(async function (house) {
+        const imageUrl = house.image_url || "";
+
+        if (!imageUrl) {
+          return { ...house, photo_url: "" };
+        }
+
+        // Existing Unsplash images are already full URLs.
+        if (imageUrl.startsWith("https://images.unsplash.com/")) {
+          return { ...house, photo_url: imageUrl };
+        }
+
+        // Handle an existing full Supabase Storage URL.
+        const storageMarker = "/storage/v1/object/";
+        const markerIndex = imageUrl.indexOf(storageMarker);
+
+        let storagePath = imageUrl;
+
+        if (markerIndex !== -1) {
+          let objectPart = imageUrl.substring(
+            markerIndex + storageMarker.length
+          );
+
+          // Support public or signed object URL formats.
+          objectPart = objectPart.replace(
+            /^(public|sign|authenticated)\//,
+            ""
+          );
+
+          const bucketMarker = "house-photos/";
+          const bucketIndex = objectPart.indexOf(bucketMarker);
+
+          if (bucketIndex === -1) {
+            console.warn("Unrecognized photo URL:", imageUrl);
+            return { ...house, photo_url: "" };
+          }
+
+          storagePath = objectPart.substring(
+            bucketIndex + bucketMarker.length
+          );
+
+          // Remove query parameters from stored URLs.
+          storagePath = storagePath.split("?")[0];
+        }
+
+        const { data: photoData, error: photoError } =
+          await supabaseClient.storage
+            .from("house-photos")
+            .createSignedUrl(storagePath, 3600);
+
+        if (photoError || !photoData?.signedUrl) {
+          console.warn(
+            "Could not create photo URL for:",
+            house.title,
+            photoError
+          );
+
+          return { ...house, photo_url: "" };
+        }
+
+        return {
+          ...house,
+          photo_url: photoData.signedUrl
+        };
+      })
+    );
+
+    allHouses = housesWithPhotos;
     applyFilters();
+
   } catch (error) {
     console.error("Unexpected loading error:", error);
-    showMessage("Something went wrong while loading houses. Please try again.");
+    showMessage(
+      "Something went wrong while loading houses. Please try again."
+    );
   }
 }
 

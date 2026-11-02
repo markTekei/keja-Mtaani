@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f8f4">
+  <meta name="description" content="List your rental house, bedsitter or apartment in Nairobi on Keja Mtaani and connect with people looking for a home.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://marktekei.github.io/keja-Mtaani/landlord.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Keja Mtaani">
+  <meta property="og:title" content="List your rental property | Keja Mtaani">
+  <meta property="og:description" content="Submit your rental property in Nairobi for review and connect with people looking for a home.">
+  <meta property="og:url" content="https://marktekei.github.io/keja-Mtaani/landlord.html">
+  <meta name="twitter:card" content="summary">
+  <title>Keja Mtaani | List your property</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="landlord-page">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Keja Mtaani home">
+      <span class="brand-icon" aria-hidden="true">⌂</span>
+      <span>keja<span class="brand-accent">mtaani</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Find a home</a>
+      <a href="index.html#how-it-works">How it works</a>
+    </nav>
+    <a class="button header-button" href="index.html">Back to home <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main class="landlord-main">
+    <div class="landlord-breadcrumb">
+      <a href="index.html">Home</a><span aria-hidden="true">/</span><span>For landlords</span>
+    </div>
+
+    <section class="landlord-intro">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-dot"></span> A PLACE FOR EVERY HOME</p>
+        <h1>Good homes find<br><span>good people.</span></h1>
+        <p>Share your rental with people searching for their next home. Create your account, add your property details, and we’ll take it from there.</p>
+      </div>
+      <div class="landlord-intro-art" aria-hidden="true">
+        <span class="intro-sparkle">✳</span>
+        <span class="intro-home-icon">⌂</span>
+        <span class="intro-art-caption">A new beginning<br>starts at home.</span>
+      </div>
+    </section>
+
+    <div class="landlord-layout">
+      <aside class="landlord-aside">
+        <section class="landlord-aside-card">
+          <p class="eyebrow">HOW IT WORKS</p>
+          <h2>Three steps to get listed.</h2>
+          <ol class="landlord-steps">
+            <li>
+              <span class="landlord-step-number">01</span>
+              <div><h3>Create your account</h3><p>Sign up with an email you can access.</p></div>
+            </li>
+            <li>
+              <span class="landlord-step-number">02</span>
+              <div><h3>Share your property</h3><p>Add the details, rent, contact and a clear photo.</p></div>
+            </li>
+            <li>
+              <span class="landlord-step-number">03</span>
+              <div><h3>We review your listing</h3><p>Your house goes live after it’s approved.</p></div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="landlord-tip">
+          <span class="landlord-tip-icon" aria-hidden="true">✦</span>
+          <div>
+            <h3>A little detail goes a long way</h3>
+            <p>Clear photos and an honest description help renters picture themselves at home.</p>
+          </div>
+        </section>
+
+        <div class="landlord-safety">
+          <span aria-hidden="true">✓</span>
+          <p>Every new property is reviewed before appearing in public search.</p>
+        </div>
+      </aside>
+
+      <div class="landlord-content">
+        <p id="page-message" class="landlord-message" role="status" aria-live="polite"></p>
+
+        <section id="auth-panel" class="landlord-panel">
+          <div class="landlord-panel-heading">
+            <p class="eyebrow">LANDLORD ACCOUNT</p>
+            <h2>Let’s get you started.</h2>
+            <p>Create an account, or sign in if you’re already with us.</p>
+          </div>
+
+          <form id="auth-form" class="landlord-form">
+            <label for="landlord-email">
+              <span>Email address</span>
+              <input id="landlord-email" type="email" autocomplete="email"
+                     placeholder="you@example.com" required>
+            </label>
+
+            <label for="landlord-password">
+              <span>Password</span>
+              <input id="landlord-password" type="password" minlength="8"
+                     autocomplete="new-password" placeholder="At least 8 characters" required>
+            </label>
+
+            <div class="landlord-form-actions">
+              <button class="button" type="submit" id="register-button">Create account <span aria-hidden="true">→</span></button>
+              <button class="button landlord-secondary-button" type="button" id="login-button">Sign in instead</button>
+            </div>
+          </form>
+
+          <p class="landlord-form-note"><span aria-hidden="true">ⓘ</span> You may need to confirm your email before signing in.</p>
+        </section>
+
+        <section id="account-panel" class="landlord-panel hidden">
+          <div class="landlord-account-heading">
+            <div>
+              <p class="eyebrow">YOUR LANDLORD ACCOUNT</p>
+              <h2>Tell us about your property.</h2>
+              <p>Complete the details below to send your listing for review.</p>
+            </div>
+            <button id="logout-button" class="button landlord-secondary-button" type="button">Sign out</button>
+          </div>
+
+          <p id="signed-in-as" class="landlord-signed-in"></p>
+
+          <form id="house-form" class="landlord-form house-form">
+            <div class="landlord-form-section">
+              <span class="form-step">01</span>
+              <div>
+                <h3>Property details</h3>
+                <p>Give renters the essentials.</p>
+              </div>
+            </div>
+
+            <label class="field-full" for="house-title">
+              <span>Listing title</span>
+              <input id="house-title" type="text" maxlength="100"
+                     placeholder="e.g. Bright and spacious bedsitter" required>
+            </label>
+
+            <label for="house-area">
+              <span>Neighbourhood</span>
+              <select id="house-area" required>
+                <option value="">Choose an area</option>
+                <option value="Kangemi">Kangemi</option>
+                <option value="Kawangware">Kawangware</option>
+                <option value="Mountain View">Mountain View</option>
+                <option value="Kitisuru">Kitisuru</option>
+                <option value="Parklands">Parklands</option>
+                <option value="Highridge">Highridge</option>
+              </select>
+            </label>
+
+            <label for="house-type">
+              <span>Type of home</span>
+              <select id="house-type" required>
+                <option value="">Choose a type</option>
+                <option value="Single room">Single room</option>
+                <option value="Bedsitter">Bedsitter</option>
+                <option value="One bedroom">One bedroom</option>
+                <option value="Two bedroom">Two bedroom</option>
+              </select>
+            </label>
+
+            <label for="house-rent">
+              <span>Monthly rent <span class="field-hint">in KSh</span></span>
+              <input id="house-rent" type="number" min="1" step="1"
+                     placeholder="e.g. 8,000" required>
+            </label>
+
+            <label for="house-phone">
+              <span>WhatsApp number</span>
+              <input id="house-phone" type="tel" maxlength="20"
+                     autocomplete="tel" placeholder="e.g. 2547XXXXXXXX" required>
+            </label>
+
+            <div class="landlord-form-section field-full">
+              <span class="form-step">02</span>
+              <div>
+                <h3>Help them picture home.</h3>
+                <p>Add a description and a clear property photo.</p>
+              </div>
+            </div>
+
+            <label class="field-full" for="house-description">
+              <span>Description <span class="field-hint">optional</span></span>
+              <textarea id="house-description" maxlength="2000"
+                        placeholder="What makes this place special? Mention features, nearby amenities, or anything renters should know."></textarea>
+              <span class="field-hint description-hint"><span id="description-count">0</span> / 2000 characters</span>
+            </label>
+
+            <div class="field-full">
+              <span class="upload-label">Property photo</span>
+              <label class="upload-zone" for="house-photo">
+                <img id="photo-preview" class="photo-preview hidden" alt="Preview of selected property photo">
+                <span id="upload-placeholder" class="upload-placeholder">
+                  <span class="upload-icon" aria-hidden="true">↑</span>
+                  <strong>Choose a photo of your property</strong>
+                  <span>JPEG, PNG or WebP · Up to 5 MB</span>
+                </span>
+                <span id="photo-file-name" class="photo-file-name hidden"></span>
+                <input id="house-photo" type="file" accept="image/jpeg,image/png,image/webp" required>
+              </label>
+            </div>
+
+            <div class="landlord-submit-row field-full">
+              <p>Your listing will be reviewed before it goes live.</p>
+              <button class="button" type="submit" id="submit-house-button">Submit for review <span aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </section>
+
+        <section id="my-houses-panel" class="landlord-panel landlord-submissions hidden">
+          <div class="landlord-panel-heading">
+            <p class="eyebrow">YOUR LISTINGS</p>
+            <h2>My submissions</h2>
+            <p>Follow each property’s progress through review.</p>
+          </div>
+          <div id="my-houses" class="landlord-list"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html">
+      <span class="brand-icon" aria-hidden="true">⌂</span>
+      <span>keja<span class="brand-accent">mtaani</span></span>
+    </a>
+    <p>Find a home that feels like yours.</p>
+    <span class="footer-divider"></span>
+    <p class="footer-small">© <span id="current-year"></span> Keja Mtaani <span class="footer-dot">·</span> Submit accurate property details and photos.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="landlord.js"></script>
+</body>
+</html>
